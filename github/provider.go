@@ -60,11 +60,12 @@ func Provider() terraform.ResourceProvider {
 			"github_branch_protection": resourceGithubBranchProtection(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"github_codeowners":           dataSourceGithubCodeowners(),
-			"github_ip_ranges":            dataSourceGithubIpRanges(),
-			"github_organization_members": dataSourceGithubOrganizationMembers(),
-			"github_repository":           dataSourceGithubRepository(),
-			"github_user":                 dataSourceGithubUser(),
+			"github_codeowners":               dataSourceGithubCodeowners(),
+			"github_ip_ranges":                dataSourceGithubIpRanges(),
+			"github_organization_members":     dataSourceGithubOrganizationMembers(),
+			"github_repository":               dataSourceGithubRepository(),
+			"github_repository_collaborators": dataSourceGithubRepositoryCollaborators(),
+			"github_user":                     dataSourceGithubUser(),
 		},
 	}
 
