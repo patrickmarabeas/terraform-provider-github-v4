@@ -105,6 +105,14 @@ func resourceGithubBranchProtection() *schema.Resource {
 		Read:   resourceGithubBranchProtectionRead,
 		Update: resourceGithubBranchProtectionUpdate,
 		Delete: resourceGithubBranchProtectionDelete,
+
+		StateUpgraders: []schema.StateUpgrader{
+			{
+				Type:    resourceGithubBranchProtectionV0().CoreConfigSchema().ImpliedType(),
+				Upgrade: resourceGithubBranchProtectionUpgradeV0,
+				Version: 0,
+			},
+		},
 	}
 }
 
