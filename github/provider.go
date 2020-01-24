@@ -57,6 +57,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
+			"github_branch_protection": resourceGithubBranchProtection(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"github_user": dataSourceGithubUser(),
