@@ -1,4 +1,4 @@
-module github.com/patrickmarabeas/terraform-provider-githubv4
+module github.com/patrickmarabeas/terraform-provider-github-v4
 
 go 1.13
 
