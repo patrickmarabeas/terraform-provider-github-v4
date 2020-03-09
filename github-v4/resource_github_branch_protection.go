@@ -147,7 +147,7 @@ func resourceGithubBranchProtectionCreate(d *schema.ResourceData, meta interface
 	}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err = client.Mutate(ctx, &mutate, input, nil)
 	if err != nil {
 		return err
@@ -169,7 +169,7 @@ func resourceGithubBranchProtectionRead(d *schema.ResourceData, meta interface{}
 	}
 
 	ctx := context.WithValue(context.Background(), "id", d.Id())
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err := client.Query(ctx, &query, variables)
 
 	return err
@@ -206,7 +206,7 @@ func resourceGithubBranchProtectionUpdate(d *schema.ResourceData, meta interface
 	}
 
 	ctx := context.WithValue(context.Background(), "id", d.Id())
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err = client.Mutate(ctx, &mutate, input, nil)
 	if err != nil {
 		return err
@@ -228,7 +228,7 @@ func resourceGithubBranchProtectionDelete(d *schema.ResourceData, meta interface
 	}
 
 	ctx := context.WithValue(context.Background(), "id", d.Id())
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err := client.Mutate(ctx, &mutate, input, nil)
 
 	return err

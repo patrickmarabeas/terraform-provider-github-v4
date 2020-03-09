@@ -71,7 +71,7 @@ func resourceGithubAppInitOrganizationMembersRead(d *schema.ResourceData, meta i
 		Role githubv4.OrganizationMemberRole
 	}
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	for {
 		err := client.Query(ctx, &query, variables)
 		if err != nil {

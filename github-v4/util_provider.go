@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/SermoDigital/jose/crypto"
 	"github.com/SermoDigital/jose/jws"
-	"github.com/google/go-github/v28/github"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 	"io/ioutil"
@@ -24,7 +23,7 @@ const (
 	PROVIDER_APP                 = "app"
 	PROVIDER_APP_PEM             = "pem"
 	PROVIDER_APP_ID              = "id"
-	PROVIDER_APP_INSTALLATION_ID = "installation"
+	PROVIDER_APP_INSTALLATION_ID = "inst"
 )
 
 type Config struct {
@@ -37,10 +36,9 @@ type Config struct {
 }
 
 type Organization struct {
-	Name          string
-	GraphQLClient *githubv4.Client
-	RESTClient    *github.Client
-	StopContext   context.Context
+	Name        string
+	Client      *githubv4.Client
+	StopContext context.Context
 }
 
 type TokenResponse struct {
@@ -66,7 +64,6 @@ func (c *Config) Clients() (interface{}, error) {
 		),
 	)
 
-	// Create GraphQL Client
 	uGQL, err := url.Parse(c.BaseURL)
 	if err != nil {
 		return nil, err
@@ -74,21 +71,7 @@ func (c *Config) Clients() (interface{}, error) {
 	uGQL.Path = path.Join(uGQL.Path, "graphql")
 	graphQLClient := githubv4.NewEnterpriseClient(uGQL.String(), httpClient)
 
-	// Create Rest Client
-	uREST, err := url.Parse(c.BaseURL)
-	if err != nil {
-		return nil, err
-	}
-	if uREST.String() != "https://api.github.com/" {
-		uREST.Path = path.Join(uREST.Path, "v3")
-	}
-	restClient, err := github.NewEnterpriseClient(uREST.String(), "", httpClient)
-	if err != nil {
-		return nil, err
-	}
-
-	org.GraphQLClient = graphQLClient
-	org.RESTClient = restClient
+	org.Client = graphQLClient
 	org.Name = c.Organization
 	return &org, nil
 }

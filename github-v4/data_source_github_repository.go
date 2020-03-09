@@ -36,7 +36,7 @@ func dataSourceGithubRepositoryRead(d *schema.ResourceData, meta interface{}) er
 	}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err := client.Query(ctx, &query, variables)
 	if err != nil {
 		return err

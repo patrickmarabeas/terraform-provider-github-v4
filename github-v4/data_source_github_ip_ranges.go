@@ -18,6 +18,7 @@ func dataSourceGithubIpRanges() *schema.Resource {
 		SchemaVersion: 1,
 
 		Schema: map[string]*schema.Schema{
+			// Computed
 			GITHUB_IP_RANGE_GIT: {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
@@ -56,7 +57,7 @@ func resourceGithubAppInitIpRangesRead(d *schema.ResourceData, meta interface{})
 	variables := map[string]interface{}{}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	err := client.Query(ctx, &query, variables)
 	if err != nil {
 		return err

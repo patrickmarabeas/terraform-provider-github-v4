@@ -75,7 +75,7 @@ func dataSourceGithubRepositoryCollaboratorsRead(d *schema.ResourceData, meta in
 	}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 
 	var allEdges []struct {
 		Node       User
