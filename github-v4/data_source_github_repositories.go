@@ -60,7 +60,7 @@ func dataSourceGithubRepositoriesRead(d *schema.ResourceData, meta interface{}) 
 	}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 	for {
 		err := client.Query(ctx, &query, variables)
 		if err != nil {

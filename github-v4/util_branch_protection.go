@@ -207,7 +207,7 @@ func getBranchProtectionID(name string, pattern string, meta interface{}) (githu
 	}
 
 	ctx := context.Background()
-	client := meta.(*Organization).GraphQLClient
+	client := meta.(*Organization).Client
 
 	var allRules []struct {
 		ID      string

@@ -23,7 +23,7 @@ func getRepositoryID(name string, meta interface{}) (githubv4.ID, error) {
 		"name":  githubv4.String(name),
 	}
 	ctx := context.Background()
-	client := meta.(Organization).GraphQLClient
+	client := meta.(Organization).Client
 	err := client.Query(ctx, &query, variables)
 	if err != nil {
 		return nil, err
