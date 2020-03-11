@@ -67,6 +67,7 @@ func Provider() terraform.ResourceProvider {
 			"github_repository":               dataSourceGithubRepository(),
 			"github_repository_collaborators": dataSourceGithubRepositoryCollaborators(),
 			"github_team":                     dataSourceGithubTeam(),
+			"github_token":                    dataSourceGithubToken(),
 			"github_user":                     dataSourceGithubUser(),
 		},
 	}

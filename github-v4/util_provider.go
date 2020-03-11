@@ -37,6 +37,7 @@ type Config struct {
 
 type Organization struct {
 	Name        string
+	Token       string
 	Client      *githubv4.Client
 	StopContext context.Context
 }
@@ -73,6 +74,7 @@ func (c *Config) Clients() (interface{}, error) {
 
 	org.Client = graphQLClient
 	org.Name = c.Organization
+	org.Token = token
 	return &org, nil
 }
 
