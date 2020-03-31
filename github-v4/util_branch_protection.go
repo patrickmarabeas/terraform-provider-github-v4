@@ -95,6 +95,22 @@ type BranchProtectionResourceData struct {
 func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (BranchProtectionResourceData, error) {
 	data := BranchProtectionResourceData{}
 
+	if v, ok := d.GetOk(REPOSITORY_ID); ok {
+		data.RepositoryID = v.(string)
+	}
+
+	if v, ok := d.GetOk(PROTECTION_PATTERN); ok {
+		data.Pattern = v.(string)
+	}
+
+	if v, ok := d.GetOk(PROTECTION_IS_ADMIN_ENFORCED); ok {
+		data.IsAdminEnforced = v.(bool)
+	}
+
+	if v, ok := d.GetOk(PROTECTION_REQUIRES_COMMIT_SIGNATURES); ok {
+		data.RequiredApprovingReviewCount = v.(int)
+	}
+
 	if v, ok := d.GetOk(PROTECTION_REQUIRES_APPROVING_REVIEWS); ok {
 		vL := v.([]interface{})
 		if len(vL) > 1 {

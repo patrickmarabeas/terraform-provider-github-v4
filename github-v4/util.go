@@ -23,7 +23,7 @@ func expandNestedSet(m map[string]interface{}, target string) []string {
 
 func githubv4StringSlice(ss []string) []githubv4.String {
 	var vGh4 []githubv4.String
-	for s := range ss {
+	for _, s := range ss {
 		vGh4 = append(vGh4, githubv4.String(s))
 	}
 	return vGh4
@@ -31,7 +31,7 @@ func githubv4StringSlice(ss []string) []githubv4.String {
 
 func githubv4IDSlice(ss []string) []githubv4.ID {
 	var vGh4 []githubv4.ID
-	for s := range ss {
+	for _, s := range ss {
 		vGh4 = append(vGh4, githubv4.ID(s))
 	}
 	return vGh4
