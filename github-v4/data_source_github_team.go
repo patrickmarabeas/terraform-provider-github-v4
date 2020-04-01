@@ -140,8 +140,19 @@ func dataSourceGithubTeamRead(d *schema.ResourceData, meta interface{}) error {
 			break
 		}
 
-		variables["childTeamCursor"] = githubv4.NewString(query.Organization.Team.ChildTeams.PageInfo.EndCursor)
-		variables["membersCursor"] = githubv4.NewString(query.Organization.Team.Members.PageInfo.EndCursor)
+		childTeamCursor := query.Organization.Team.ChildTeams.PageInfo.EndCursor
+		if childTeamCursor != "" {
+			variables["childTeamCursor"] = childTeamCursor
+		} else {
+			variables["childTeamCursor"] = (*githubv4.String)(nil)
+		}
+
+		membersCursor := query.Organization.Team.Members.PageInfo.EndCursor
+		if membersCursor != "" {
+			variables["membersCursor"] = membersCursor
+		} else {
+			variables["membersCursor"] = (*githubv4.String)(nil)
+		}
 	}
 
 	var childTeams []map[string]interface{}
