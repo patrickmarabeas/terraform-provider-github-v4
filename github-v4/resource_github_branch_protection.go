@@ -188,7 +188,7 @@ func resourceGithubBranchProtectionUpdate(d *schema.ResourceData, meta interface
 		return err
 	}
 	input := githubv4.UpdateBranchProtectionRuleInput{
-		BranchProtectionRuleID:       githubv4.String(data.BranchProtectionRuleID),
+		BranchProtectionRuleID:       d.Id(),
 		DismissesStaleReviews:        githubv4.NewBoolean(githubv4.Boolean(data.DismissesStaleReviews)),
 		IsAdminEnforced:              githubv4.NewBoolean(githubv4.Boolean(data.IsAdminEnforced)),
 		Pattern:                      githubv4.NewString(githubv4.String(data.Pattern)),
