@@ -106,6 +106,10 @@ func resourceGithubBranchProtection() *schema.Resource {
 		Update: resourceGithubBranchProtectionUpdate,
 		Delete: resourceGithubBranchProtectionDelete,
 
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
+
 		StateUpgraders: []schema.StateUpgrader{
 			{
 				Type:    resourceGithubBranchProtectionV0().CoreConfigSchema().ImpliedType(),
