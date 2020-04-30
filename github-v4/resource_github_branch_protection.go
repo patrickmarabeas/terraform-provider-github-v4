@@ -6,6 +6,8 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/helper/validation"
 	"github.com/shurcooL/githubv4"
+	"log"
+	"strings"
 )
 
 func resourceGithubBranchProtection() *schema.Resource {
@@ -175,8 +177,17 @@ func resourceGithubBranchProtectionRead(d *schema.ResourceData, meta interface{}
 	ctx := context.WithValue(context.Background(), "id", d.Id())
 	client := meta.(*Organization).Client
 	err := client.Query(ctx, &query, variables)
+	if err != nil {
+		if strings.Contains(err.Error(), "Could not resolve to a node with the global id") {
+			log.Printf("[WARN] Removing branch protection (%s) from state because it no longer exists in GitHub", d.Id())
+			d.SetId("")
+			return nil
+		}
 
-	return err
+		return err
+	}
+
+	return nil
 }
 
 func resourceGithubBranchProtectionUpdate(d *schema.ResourceData, meta interface{}) error {
