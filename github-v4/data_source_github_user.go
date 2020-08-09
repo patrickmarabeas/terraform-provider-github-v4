@@ -18,11 +18,6 @@ func dataSourceGithubUser() *schema.Resource {
 				Required:    true,
 				Description: "",
 			},
-			// Computed
-			USER_EMAIL: {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			USER_IS_SITE_ADMIN: {
 				Type:     schema.TypeBool,
 				Computed: true,
@@ -48,11 +43,6 @@ func dataSourceGithubUserRead(d *schema.ResourceData, meta interface{}) error {
 	ctx := context.Background()
 	client := meta.(*Organization).Client
 	err := client.Query(ctx, &query, variables)
-	if err != nil {
-		return err
-	}
-
-	err = d.Set(USER_EMAIL, query.User.Email)
 	if err != nil {
 		return err
 	}

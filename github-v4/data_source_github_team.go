@@ -45,10 +45,6 @@ func dataSourceGithubTeam() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						USER_EMAIL: {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
 						USER_IS_SITE_ADMIN: {
 							Type:     schema.TypeBool,
 							Computed: true,
@@ -171,7 +167,6 @@ func dataSourceGithubTeamRead(d *schema.ResourceData, meta interface{}) error {
 	for _, m := range allMembers {
 		member := make(map[string]interface{})
 		member[USER_ID] = fmt.Sprintf("%s", m.Node.ID)
-		member[USER_EMAIL] = string(m.Node.Email)
 		member[USER_IS_SITE_ADMIN] = bool(m.Node.IsSiteAdmin)
 		member[USER_LOGIN] = string(m.Node.Login)
 		member[USER_NAME] = string(m.Node.Name)

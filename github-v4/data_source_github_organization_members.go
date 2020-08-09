@@ -22,10 +22,6 @@ func dataSourceGithubOrganizationMembers() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						USER_EMAIL: {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
 						USER_IS_SITE_ADMIN: {
 							Type:     schema.TypeBool,
 							Computed: true,
@@ -88,7 +84,6 @@ func resourceGithubAppInitOrganizationMembersRead(d *schema.ResourceData, meta i
 	var allUsers []map[string]interface{}
 	for _, u := range allEdges {
 		user := make(map[string]interface{})
-		user[USER_EMAIL] = string(u.Node.Email)
 		user[USER_IS_SITE_ADMIN] = bool(u.Node.IsSiteAdmin)
 		user[USER_LOGIN] = string(u.Node.Login)
 		user[USER_NAME] = string(u.Node.Name)
