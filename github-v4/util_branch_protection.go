@@ -107,7 +107,7 @@ func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (Bra
 	}
 
 	if v, ok := d.GetOk(PROTECTION_REQUIRES_COMMIT_SIGNATURES); ok {
-		data.RequiredApprovingReviewCount = v.(int)
+		data.RequiresCommitSignatures = v.(bool)
 	}
 
 	if v, ok := d.GetOk(PROTECTION_REQUIRES_APPROVING_REVIEWS); ok {
