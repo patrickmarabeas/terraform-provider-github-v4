@@ -22,6 +22,11 @@ const (
 	PROTECTION_RESTRICTS_REVIEW_DISMISSALS     = "dismissal_restrictions"
 )
 
+type Actor struct {
+	ID   githubv4.ID
+	Name githubv4.String
+}
+
 type BranchProtectionRule struct {
 	Repository struct {
 		ID   githubv4.String
@@ -32,28 +37,16 @@ type BranchProtectionRule struct {
 			Actor struct {
 				// `App` is not supported (at least for GitHub App Installation tokens)
 				// Seem to be unable to provide the necessary permissions.
-				Team struct {
-					ID   githubv4.ID
-					Name githubv4.String
-				} `graphql:"... on Team"`
-				User struct {
-					ID   githubv4.ID
-					Name githubv4.String
-				} `graphql:"... on User"`
+				Team Actor `graphql:"... on Team"`
+				User Actor `graphql:"... on User"`
 			}
 		}
 	} `graphql:"pushAllowances(first: 100)"`
 	ReviewDismissalAllowances struct {
 		Nodes []struct {
 			Actor struct {
-				Team struct {
-					ID   githubv4.ID
-					Name githubv4.String
-				} `graphql:"... on Team"`
-				User struct {
-					ID   githubv4.ID
-					Name githubv4.String
-				} `graphql:"... on User"`
+				Team Actor `graphql:"... on Team"`
+				User Actor `graphql:"... on User"`
 			}
 		}
 	} `graphql:"reviewDismissalAllowances(first: 100)"`
@@ -183,6 +176,68 @@ func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (Bra
 	}
 
 	return data, nil
+}
+
+func setApprovingReviews(d *schema.ResourceData, protection BranchProtectionRule) interface{} {
+	if protection.RequiresApprovingReviews == false {
+		return nil
+	}
+
+	dismissalAllowances := protection.ReviewDismissalAllowances.Nodes
+	dismissalActors := make([]interface{}, 0, len(dismissalAllowances))
+	for _, d := range dismissalAllowances {
+		if d.Actor.Team != (Actor{}) {
+			dismissalActors = append(dismissalActors, d.Actor.Team.ID)
+		}
+		if d.Actor.User != (Actor{}) {
+			dismissalActors = append(dismissalActors, d.Actor.Team.ID)
+		}
+	}
+
+	approvalReviews := []interface{}{
+		map[string]interface{}{
+			PROTECTION_REQUIRED_APPROVING_REVIEW_COUNT: protection.RequiredApprovingReviewCount,
+			PROTECTION_REQUIRES_CODE_OWNER_REVIEWS:     protection.RequiresCodeOwnerReviews,
+			PROTECTION_DISMISSES_STALE_REVIEWS:         protection.DismissesStaleReviews,
+			PROTECTION_RESTRICTS_REVIEW_DISMISSALS: 	dismissalActors,
+		},
+	}
+
+	return approvalReviews
+}
+
+func setStatusChecks(d *schema.ResourceData, protection BranchProtectionRule) interface{} {
+	if protection.RequiresStatusChecks == false {
+		return nil
+	}
+
+	statusChecks := []interface{}{
+		map[string]interface{}{
+			PROTECTION_REQUIRES_STRICT_STATUS_CHECKS:  protection.RequiresStrictStatusChecks,
+			PROTECTION_REQUIRED_STATUS_CHECK_CONTEXTS: protection.RequiredStatusCheckContexts,
+		},
+	}
+
+	return statusChecks
+}
+
+func setPushes(d *schema.ResourceData, protection BranchProtectionRule) []string {
+	if protection.RestrictsPushes == false {
+		return nil
+	}
+
+	pushAllowances := protection.PushAllowances.Nodes
+	pushActors := make([]string, 0, len(pushAllowances))
+	for _, p := range pushAllowances {
+		if p.Actor.Team != (Actor{}) {
+			pushActors = append(pushActors, p.Actor.Team.ID.(string))
+		}
+		if p.Actor.User != (Actor{}) {
+			pushActors = append(pushActors, p.Actor.Team.ID.(string))
+		}
+	}
+
+	return pushActors
 }
 
 func getBranchProtectionID(name string, pattern string, meta interface{}) (githubv4.ID, error) {
