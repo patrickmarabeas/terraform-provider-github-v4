@@ -189,19 +189,19 @@ func resourceGithubBranchProtectionRead(d *schema.ResourceData, meta interface{}
 		log.Printf("[WARN] Problem setting '%s' in %s %s branch protection (%s)", PROTECTION_REQUIRES_COMMIT_SIGNATURES, protection.Repository.Name, protection.Pattern, d.Id())
 	}
 
-	approvingReviews := setApprovingReviews(d, protection)
+	approvingReviews := setApprovingReviews(protection)
 	err = d.Set(PROTECTION_REQUIRES_APPROVING_REVIEWS, approvingReviews)
 	if err != nil {
 		log.Printf("[WARN] Problem setting '%s' in %s %s branch protection (%s)", PROTECTION_REQUIRES_APPROVING_REVIEWS, protection.Repository.Name, protection.Pattern, d.Id())
 	}
 
-	statusChecks := setStatusChecks(d, protection)
+	statusChecks := setStatusChecks(protection)
 	err = d.Set(PROTECTION_REQUIRES_STATUS_CHECKS, statusChecks)
 	if err != nil {
 		log.Printf("[WARN] Problem setting '%s' in %s %s branch protection (%s)", PROTECTION_REQUIRES_STATUS_CHECKS, protection.Repository.Name, protection.Pattern, d.Id())
 	}
 
-	restrictsPushes := setPushes(d, protection)
+	restrictsPushes := setPushes(protection)
 	err = d.Set(PROTECTION_RESTRICTS_PUSHES, restrictsPushes)
 	if err != nil {
 		log.Printf("[WARN] Problem setting '%s' in %s %s branch protection (%s)", PROTECTION_RESTRICTS_PUSHES, protection.Repository.Name, protection.Pattern, d.Id())

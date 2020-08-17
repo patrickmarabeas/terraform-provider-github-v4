@@ -178,7 +178,7 @@ func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (Bra
 	return data, nil
 }
 
-func setApprovingReviews(d *schema.ResourceData, protection BranchProtectionRule) interface{} {
+func setApprovingReviews(protection BranchProtectionRule) interface{} {
 	if protection.RequiresApprovingReviews == false {
 		return nil
 	}
@@ -206,7 +206,7 @@ func setApprovingReviews(d *schema.ResourceData, protection BranchProtectionRule
 	return approvalReviews
 }
 
-func setStatusChecks(d *schema.ResourceData, protection BranchProtectionRule) interface{} {
+func setStatusChecks(protection BranchProtectionRule) interface{} {
 	if protection.RequiresStatusChecks == false {
 		return nil
 	}
@@ -221,7 +221,7 @@ func setStatusChecks(d *schema.ResourceData, protection BranchProtectionRule) in
 	return statusChecks
 }
 
-func setPushes(d *schema.ResourceData, protection BranchProtectionRule) []string {
+func setPushes(protection BranchProtectionRule) []string {
 	if protection.RestrictsPushes == false {
 		return nil
 	}
