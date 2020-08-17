@@ -57,17 +57,9 @@ func resourceGithubBranchProtection() *schema.Resource {
 							Optional: true,
 						},
 						PROTECTION_RESTRICTS_REVIEW_DISMISSALS: {
-							Type:     schema.TypeList,
+							Type:     schema.TypeSet,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									PROTECTION_ACTOR_IDS: {
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-									},
-								},
-							},
+							Elem:     &schema.Schema{Type: schema.TypeString},
 						},
 					},
 				},
@@ -90,17 +82,9 @@ func resourceGithubBranchProtection() *schema.Resource {
 				},
 			},
 			PROTECTION_RESTRICTS_PUSHES: {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						PROTECTION_ACTOR_IDS: {
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
-						},
-					},
-				},
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 		},
 

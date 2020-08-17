@@ -20,7 +20,6 @@ const (
 	PROTECTION_REQUIRES_STRICT_STATUS_CHECKS   = "strict"
 	PROTECTION_RESTRICTS_PUSHES                = "push_restrictions"
 	PROTECTION_RESTRICTS_REVIEW_DISMISSALS     = "dismissal_restrictions"
-	PROTECTION_ACTOR_IDS                       = "actor_ids"
 )
 
 type BranchProtectionRule struct {
@@ -135,21 +134,14 @@ func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (Bra
 				data.RequiresCodeOwnerReviews = v.(bool)
 			}
 			if v, ok := m[PROTECTION_RESTRICTS_REVIEW_DISMISSALS]; ok {
-				vL = v.([]interface{})
-				if len(vL) > 1 {
-					return BranchProtectionResourceData{},
-						fmt.Errorf("error multiple %s declarations", PROTECTION_RESTRICTS_REVIEW_DISMISSALS)
-				}
+				reviewDismissalActorIDs := make([]string, 0)
+				vL := v.(*schema.Set).List()
 				for _, v := range vL {
-					if v == nil {
-						break
-					}
-
-					m := v.(map[string]interface{})
-					data.ReviewDismissalActorIDs = expandNestedSet(m, PROTECTION_ACTOR_IDS)
-					if len(data.ReviewDismissalActorIDs) > 0 {
-						data.RestrictsReviewDismissals = true
-					}
+					reviewDismissalActorIDs = append(reviewDismissalActorIDs, v.(string))
+				}
+				if len(reviewDismissalActorIDs) > 0 {
+					data.ReviewDismissalActorIDs = reviewDismissalActorIDs
+					data.RestrictsReviewDismissals = true
 				}
 			}
 		}
@@ -179,21 +171,14 @@ func branchProtectionResourceData(d *schema.ResourceData, meta interface{}) (Bra
 	}
 
 	if v, ok := d.GetOk(PROTECTION_RESTRICTS_PUSHES); ok {
-		vL := v.([]interface{})
-		if len(vL) > 1 {
-			return BranchProtectionResourceData{},
-				fmt.Errorf("error multiple %s declarations", PROTECTION_RESTRICTS_PUSHES)
-		}
+		pushActorIDs := make([]string, 0)
+		vL := v.(*schema.Set).List()
 		for _, v := range vL {
-			if v == nil {
-				break
-			}
-
-			m := v.(map[string]interface{})
-			data.PushActorIDs = expandNestedSet(m, PROTECTION_ACTOR_IDS)
-			if len(data.PushActorIDs) > 0 {
-				data.RestrictsPushes = true
-			}
+			pushActorIDs = append(pushActorIDs, v.(string))
+		}
+		if len(pushActorIDs) > 0 {
+			data.PushActorIDs = pushActorIDs
+			data.RestrictsPushes = true
 		}
 	}
 
