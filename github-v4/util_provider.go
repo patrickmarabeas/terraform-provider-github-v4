@@ -100,7 +100,11 @@ func newAppToken(c *Config) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	tokenURL := fmt.Sprintf("%s://%s/app/installations/%s/access_tokens", u.Scheme, u.Host, c.InstallationID)
+	baseURL := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+	if u.String() != "https://api.github.com/" {
+		baseURL = fmt.Sprintf("%s://%s/v3/", u.Scheme, u.Host)
+	}
+	tokenURL := fmt.Sprintf("%s/app/installations/%s/access_tokens", baseURL, c.InstallationID)
 	req, err := http.NewRequest("POST", tokenURL, nil)
 	if err != nil {
 		return "", err
