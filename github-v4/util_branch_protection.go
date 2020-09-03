@@ -199,7 +199,7 @@ func setApprovingReviews(protection BranchProtectionRule) interface{} {
 			PROTECTION_REQUIRED_APPROVING_REVIEW_COUNT: protection.RequiredApprovingReviewCount,
 			PROTECTION_REQUIRES_CODE_OWNER_REVIEWS:     protection.RequiresCodeOwnerReviews,
 			PROTECTION_DISMISSES_STALE_REVIEWS:         protection.DismissesStaleReviews,
-			PROTECTION_RESTRICTS_REVIEW_DISMISSALS: 	dismissalActors,
+			PROTECTION_RESTRICTS_REVIEW_DISMISSALS:     dismissalActors,
 		},
 	}
 
